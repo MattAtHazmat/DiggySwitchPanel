@@ -1,0 +1,24 @@
+# OpenSCAD generated files
+*.stl
+*.3mf
+*.amf
+*.off
+*.csg
+*.gcode
+
+# OpenSCAD backup files (if enabled)
+# OpenSCAD can create backups in a dedicated folder or alongside source files.
+# Adjust this based on your OpenSCAD backup settings.
+*.bak
+*~
+
+# Editor or OS specific temporary files
+# These can vary depending on your operating system and text editor.
+# Common examples include:
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*.swo
+*.tmp
