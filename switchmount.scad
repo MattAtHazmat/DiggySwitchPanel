@@ -4,7 +4,7 @@
  in2mm = 25.4;
  
 flangeWidth=       0.187 * in2mm;
- 
+
 
 // measurements based upon outer size
 // width =            4.43  * in2mm;
@@ -118,10 +118,9 @@ module innerBoxOutsideRound(r=10){
 //========================================================================
 module snap(x=10,y=20,w=30)
 {
-    translate([-w/2,0,0]) rotate([90,0,0]) 
-        mirror([0,1,0]) mirror([0,0,1]) rotate([0,90,0]) 
-            linear_extrude(w)
-                polygon([[0,0],[x,0],[0,y]]);
+    translate([-w/2,0,0])  rotate([90,0,0])  mirror([0,0,1])
+                rotate([0,90,0]) linear_extrude(w)
+                    polygon([[0,0],[x,0],[0,y]]);
 }
 //========================================================================
 module innerBoxOutside(){
@@ -149,10 +148,10 @@ module innerbox(){
     difference()
     {
         innerBoxOutside();
-        translate([innerBoxWall,innerBoxWall,0])
-        {
-            innerBoxRemove();
-        }
+       translate([innerBoxWall,innerBoxWall,0])
+       {
+           innerBoxRemove();
+       }
     }
 }
 //========================================================================
@@ -187,7 +186,10 @@ module switchHolder(){
         flangeRound(width,depth,flangeRounding);        
     }    
 }
+
+
 //========================================================================
 // Main Code
 //========================================================================
+//snap(snapWidth,snapDepth,snapHeight);
 switchHolder();
