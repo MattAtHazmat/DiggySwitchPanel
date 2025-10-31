@@ -3,15 +3,24 @@
  delta = $preview ? 0.01: 0.001;
  in2mm = 25.4;
  
- // measurements based upon outer size
- width =            4.43  * in2mm;
- depth =            2.275 * in2mm;
+flangeWidth=       0.187 * in2mm;
+ 
+
+// measurements based upon outer size
+// width =            4.43  * in2mm;
+// depth =            2.275 * in2mm;
+// innerBoxWidth=     width - 2*flangeWidth; 
+//innerBoxDepth=     depth - 2* flangeWidth; 
+
+// measurements based upon hole size
+innerBoxWidth=     4.137* in2mm; 
+innerBoxDepth=     1.936* in2mm;
+width =            innerBoxWidth + 2* flangeWidth;
+depth =            innerBoxDepth + 2* flangeWidth;
+
  flangeZ =          0.157 * in2mm;
- flangeRadius =     0.1   * in2mm;
+ flangeRadius =     flangeWidth;//0.1   * in2mm;
  flangeD = flangeRadius*2;
- flangeWidth=       0.157 * in2mm;
- innerBoxWidth=     width - 2*flangeWidth; 
- innerBoxDepth=     depth - 2* flangeWidth; 
  innerBoxHeight =   0.4   * in2mm;
  innerBoxWall =     0.076 * in2mm;
  switchWidth = 23;
@@ -19,6 +28,10 @@
  rounding = .04*in2mm;
  switchHeight = innerBoxHeight+flangeZ+(0.5*in2mm);
  flangeRounding = 0.1 * in2mm;
+ snapWidth = 0.5 * in2mm;
+ panelThickness = innerBoxWall;
+ snapDepth = innerBoxWall/2;
+ snapHeight = innerBoxHeight - panelThickness;
 //========================================================================
 module flangeRound(x=10,y=10,r=5){
     translate([0,0,-delta])
@@ -103,10 +116,28 @@ module innerBoxOutsideRound(r=10){
     }
 }
 //========================================================================
+module snap(x=10,y=20,w=30)
+{
+    translate([-w/2,0,0]) rotate([90,0,0]) 
+        mirror([0,1,0]) mirror([0,0,1]) rotate([0,90,0]) 
+            linear_extrude(w)
+                polygon([[0,0],[x,0],[0,y]]);
+}
+//========================================================================
 module innerBoxOutside(){
     difference()
     {
-        cube([innerBoxWidth,innerBoxDepth,innerBoxHeight]);
+        union() 
+        {
+            cube([innerBoxWidth,innerBoxDepth,innerBoxHeight]);
+            translate([innerBoxWidth/2,0,panelThickness])     
+            {       
+                snap(snapDepth,snapHeight,snapWidth);
+                translate([0,innerBoxDepth,0])
+                mirror([0,1,0])
+                snap(snapDepth,snapHeight,snapWidth);
+            }
+        }
         innerBoxOutsideRound(innerBoxWall);
     }
 }
@@ -118,10 +149,10 @@ module innerbox(){
     difference()
     {
         innerBoxOutside();
-       translate([innerBoxWall,innerBoxWall,0])
-       {
-           innerBoxRemove();
-       }
+        translate([innerBoxWall,innerBoxWall,0])
+        {
+            innerBoxRemove();
+        }
     }
 }
 //========================================================================
@@ -156,9 +187,7 @@ module switchHolder(){
         flangeRound(width,depth,flangeRounding);        
     }    
 }
-
 //========================================================================
 // Main Code
 //========================================================================
-
 switchHolder();
